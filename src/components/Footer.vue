@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="footer">
     <section>&copy; 2021 Copyright:</section>
     <a href="https://www.roomscape.es"> www.roomscape.es </a>
   </footer>
