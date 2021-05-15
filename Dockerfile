@@ -1,19 +1,15 @@
-FROM node:14
-
-# Create app directory
-WORKDIR /usr/src/app
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+# etapa de compilación
+FROM node:15 AS  build-stage
+WORKDIR /app
 COPY package*.json ./
-
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
-
-# Bundle app source
 COPY . .
+RUN npm run build
 
-EXPOSE 8080
-CMD [ "node", "server.js" ]
+# etapa de producción
+FROM nginx:1.13.12-alpine AS production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
