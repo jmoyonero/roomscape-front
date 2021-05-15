@@ -10,9 +10,9 @@ const wrapper = mount(Footer, {
     localVue
 });
 
-describe('Pruebas unitarias de la Home', () => {
+describe('Pruebas unitarias del componente Footer', () => {
 
-    it('Validación de elementos HTML de la Home', async () => {
+    it('Validación de los elementos del Footer', async () => {
         expect(wrapper.find('.footer').find('section').text()).toEqual("© 2021 Copyright:")
         expect(wrapper.find('.footer').find('a').text()).toEqual("www.roomscape.es")
     })
