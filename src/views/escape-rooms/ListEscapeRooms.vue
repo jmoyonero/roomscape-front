@@ -2,7 +2,7 @@
   <div id="escape_rooms_list">
     <h1 class="escape_rooms_list_title">ESCAPE ROOMS</h1>
     <div class="escape_rooms_list_container">
-      <div class="card_container" v-for="(item) in items" v-bind:key="item">
+      <div class="card_container" v-for="(item) in items" v-bind:key="item.id">
         <b-card
             :title=item.nombre
             :img-src='"https://picsum.photos/100/200/?image="+Math.floor(Math.random() * 50) + 1'
@@ -25,7 +25,7 @@
           <b-button href="#" variant="primary">Reservar</b-button>
         </b-card>
       </div>
-      <p v-if="items.length==0">En este momento no hay escape rooms disponibles.</p>
+      <p class="empty_msg" v-if="showEmptyMsg">En este momento no hay escape rooms disponibles.</p>
     </div>
   </div>
 </template>
@@ -38,7 +38,8 @@ export default {
   name: "ListEscapeRooms",
   data() {
     return {
-      items: []
+      items: [],
+      showEmptyMsg: false
     }
   },
   created() {
@@ -47,6 +48,7 @@ export default {
         .then(response => {
           this.items = response.data.filter(escapeRoom => escapeRoom.activo)
               .sort((a, b) => a.nombre.localeCompare(b.nombre))
+          this.showEmptyMsg = this.items.length==0
         })
   }
 }
