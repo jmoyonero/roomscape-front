@@ -22,7 +22,7 @@
           id="input-group-password"
           label="Contraseña:"
           label-for="input-password"
-          description="La contraseña debe ..."
+          description="min. 8 caracteres, al menos 1 letra y 1 número"
       >
         <b-form-input
             id="input-password"
@@ -59,12 +59,14 @@
       </div>
     </b-form>
 
+    <b-modal id="modal-1" title="BootstrapVue">
+      <p class="my-4">Hello from modal!</p>
+    </b-modal>
+
     <ModalMessage
-        :timeToShow="modal.timeToShow"
         :message="modal.message"
         :title="modal.title"
         :variant="modal.variant"
-        :id="modal.id"
         class="custom-modal"
     ></ModalMessage>
   </div>
@@ -86,11 +88,9 @@ export default {
       },
       show: true,
       modal: {
-        timeToShow: 0,
         title: '',
         message: '',
         variant: '',
-        id: 0
       }
     }
   },
@@ -104,11 +104,11 @@ export default {
     },
     passwordValidator() {
       if (this.form.password == '') return null
-      return this.form.password.trim() != '' ? true : false
+      return /^(?=\w*\d)(?=\w*[a-z])\S{8,}$/.test(this.form.password) && this.form.password.length >= 8;
     },
     dniValidator() {
       if (this.form.dni == '') return null
-      return !/[^a-zA-Z0-9-_]/.test(this.form.dni);
+      return this.validateDni(this.form.dni)
     }
   },
   methods: {
@@ -117,10 +117,11 @@ export default {
 
       let newForm = {}
       newForm.user = this.form.user
-      newForm.password = this.CryptoJS.AES.encrypt(this.form.password, "RoomScape").toString()
+      newForm.password = window.btoa(unescape(encodeURIComponent(this.form.password + "roomscape")));
       newForm.dni = this.form.dni
+
       axios
-          .post('http://localhost:8080/client/create', newForm)
+          .post('https://backend-dev.roomscape.es/client/create', newForm)
           .then(response => {
             this.showSuccessModal(response.data)
             this.resetForm()
@@ -139,19 +140,29 @@ export default {
       this.form.dni = ''
     },
     showSuccessModal(client) {
-      this.modal.timeToShow = 5
+      this.$bvModal.show("modal")
       this.modal.title = "¡Operación Exitosa!"
       this.modal.message = "Te has registrado correctamente: " + client.user
       this.modal.variant = 'success'
-      setTimeout(() => this.modal.timeToShow = 0, 5000);
     },
     showWarningModal(message) {
-      this.modal.timeToShow = 5
+      this.$bvModal.show("modal")
       this.modal.message = message
       this.modal.title = "¡Operación Fallida!"
-      this.modal.id = 1
       this.modal.variant = 'warning'
-      setTimeout(() => this.modal.timeToShow = 0, 5000);
+    },
+    validateDni(dni) {
+      let regExpDni = /^\d{8}[A-Z]$/;
+
+      if (regExpDni.test(dni) == true) {
+        let number = dni.substr(0, dni.length - 1);
+        let letterId = dni.substr(dni.length - 1, 1);
+        let letter = 'TRWAGMYFPDXBNJZSQVHLCKET';
+        number = number % 23;
+        return letter.substring(number, number + 1) == letterId.toUpperCase()
+      } else {
+        return false
+      }
     }
   }
 }

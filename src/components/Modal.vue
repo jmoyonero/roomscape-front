@@ -1,20 +1,17 @@
 <template>
-  <div class="main_container_modal">
-    <b-alert
-        :show="timeToShow"
-        @dismissed="timeToShow=0"
-        @dismiss-count-down="timeToShow"
-        :variant="variant">
-      <h4 class="alert-heading">{{ this.title }}</h4>
-      <p>
-        {{ this.message }}
-      </p>
-      <hr>
-      <p class="mb-0">
-        Identificador: {{ this.id }}.
-      </p>
-    </b-alert>
+  <div>
+    <b-modal id="modal" body-class="modal-class" hide-header hide-footer centered>
+      <b-alert id="alert"
+               show
+               :variant=variant>
+        <h4 class="alert-heading">{{ this.title }}</h4>
+        <p>
+          {{ this.message }}
+        </p>
+      </b-alert>
+    </b-modal>
   </div>
+
 </template>
 
 <script>
@@ -23,21 +20,30 @@ export default {
   data() {
     return {
       show: true,
+      hideFooter: true,
+      hideHeader: true
     }
   },
   props: {
-    timeToShow: Number,
     message: String,
     title: String,
     variant: String,
-    id: Number
   }
 }
 </script>
 
 <style scoped>
-.main_container_modal {
-  width: 100%;
-  height: 100px;
+
+/deep/ .modal-class {
+  padding: 0;
 }
+
+#alert {
+  margin: 0;
+}
+
+#modal {
+  background-color: #007bff;
+}
+
 </style>
