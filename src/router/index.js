@@ -10,8 +10,13 @@ const routes = [
         component: () => import('../views/Home.vue')
     },
     {
+        path: '/escape-rooms/listado',
+        name: 'ListEscapeRooms',
+        component: () => import('../views/escape-rooms/ListEscapeRooms.vue')
+    },
+    {
         path: '/registro',
-        name: 'ListEscapeRoom',
+        name: 'NewClient',
         component: () => import('../views/clients/NewClient.vue')
     },
     {

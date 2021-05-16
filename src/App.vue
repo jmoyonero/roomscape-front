@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Header/>
+    <NavigationMenu/>
     <div id="main_container">
       <div class="view_container">
         <router-view class="views"/>
@@ -13,10 +14,12 @@
 <script>
 import Footer from './components/Footer.vue'
 import Header from './components/Header.vue'
+import NavigationMenu from "./components/NavigationMenu";
 
 export default {
   name: 'App',
   components: {
+    NavigationMenu,
     Header,
     Footer
   }
@@ -45,6 +48,6 @@ body {
 }
 
 .views {
-  min-height: calc(100vh - 150px);
+  min-height: calc(100vh - 206px);
 }
 </style>
