@@ -7,7 +7,7 @@
       <img href="/" class="logo" src="../../public/images/roomscape_logo.png">
     </a>
 
-    <b-avatar id="avatar" href="/registro" size="5rem" variant="dark" class="ml-auto"></b-avatar>
+    <b-avatar id="avatar" href="/login" size="5rem" variant="dark" class="ml-auto"></b-avatar>
   </header>
 </template>
 
