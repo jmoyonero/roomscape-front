@@ -71,7 +71,6 @@ export default {
       form: {
         user: '',
         password: '',
-        dni: ''
       },
       show: true,
       modal: {
@@ -92,10 +91,6 @@ export default {
     passwordValidator() {
       if (this.form.password == '') return null
       return /^(?=\w*\d)(?=\w*[a-z])\S{8,}$/.test(this.form.password) && this.form.password.length >= 8;
-    },
-    dniValidator() {
-      if (this.form.dni == '') return null
-      return this.validateDni(this.form.dni)
     }
   },
   methods: {
@@ -105,7 +100,6 @@ export default {
       let newForm = {}
       newForm.user = this.form.user
       newForm.password = window.btoa(unescape(encodeURIComponent(this.form.password + "roomscape")));
-      newForm.dni = this.form.dni
 
       axios
           .post('https://backend-dev.roomscape.es/client/create', newForm)
@@ -124,7 +118,6 @@ export default {
     resetForm() {
       this.form.user = ''
       this.form.password = ''
-      this.form.dni = ''
     },
     showSuccessModal(client) {
       this.$bvModal.show("modal")
@@ -137,19 +130,6 @@ export default {
       this.modal.message = message
       this.modal.title = "¡Operación Fallida!"
       this.modal.variant = 'warning'
-    },
-    validateDni(dni) {
-      let regExpDni = /^\d{8}[A-Z]$/;
-
-      if (regExpDni.test(dni) == true) {
-        let number = dni.substr(0, dni.length - 1);
-        let letterId = dni.substr(dni.length - 1, 1);
-        let letter = 'TRWAGMYFPDXBNJZSQVHLCKET';
-        number = number % 23;
-        return letter.substring(number, number + 1) == letterId.toUpperCase()
-      } else {
-        return false
-      }
     }
   }
 }
