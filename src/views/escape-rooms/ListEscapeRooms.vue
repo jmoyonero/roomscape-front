@@ -44,7 +44,7 @@ export default {
   },
   created() {
     axios
-        .get('https://dev.roomscape.es/escape-room/list')
+        .get('https://backend-dev.roomscape.es/escape-room/list')
         .then(response => {
           this.items = response.data.filter(escapeRoom => escapeRoom.activo)
               .sort((a, b) => a.nombre.localeCompare(b.nombre))

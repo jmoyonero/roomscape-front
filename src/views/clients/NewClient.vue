@@ -121,7 +121,7 @@ export default {
       newForm.dni = this.form.dni
 
       axios
-          .post('https://dev.roomscape.es/client/create', newForm)
+          .post('https://backend-dev.roomscape.es/client/create', newForm)
           .then(response => {
             this.showSuccessModal(response.data)
             this.resetForm()
