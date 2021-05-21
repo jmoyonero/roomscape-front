@@ -6,15 +6,22 @@
     <a class="link" href="/">
       <img href="/" class="logo" src="../../public/images/roomscape_logo.png">
     </a>
-
-    <b-avatar id="avatar" href="/login" size="5rem" variant="dark" class="ml-auto"></b-avatar>
+    <div class="ml-auto">
+      <b-button class="logout-button btn btn-dark" href="/logout" v-if="showLogoutButton">Cerrar Sesión</b-button>
+      <b-avatar id="avatar" href="/login" size="5rem" variant="dark"></b-avatar>
+    </div>
   </header>
 </template>
 
 
 <script>
 export default {
-  name: "Header"
+  name: "Header",
+  computed: {
+    showLogoutButton(){
+      return (this.$cookies.get("Session")) ? true : false
+    }
+  }
 }
 </script>
 
@@ -65,6 +72,10 @@ header {
 .link {
   color: black;
   text-decoration: none;
+}
+
+.logout-button {
+  margin-right: 20px;
 }
 
 </style>

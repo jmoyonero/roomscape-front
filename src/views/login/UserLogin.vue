@@ -1,5 +1,5 @@
 <template>
-  <div id="login_form">
+  <div id="login_form" v-if="showLogin">
     <div id="title"><h1>Login</h1></div>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group
@@ -77,7 +77,8 @@ export default {
         title: '',
         message: '',
         variant: '',
-      }
+      },
+      showLogin: false
     }
   },
   computed: {
@@ -102,10 +103,16 @@ export default {
       newForm.password = window.btoa(unescape(encodeURIComponent(this.form.password + "roomscape")));
 
       axios
-          .post('https://backend-dev.roomscape.es/client/create', newForm)
+          .post('https://dev.roomscape.es/login', newForm)
           .then(response => {
+            let d = new Date();
+            d.setTime(d.getTime() + 1 * 60 * 60 * 1000);
+            let expires = "expires=" + d.toUTCString();
+            document.cookie =
+                "Session=" + response.data + ";" + expires + ";path=/";
             this.showSuccessModal(response.data)
             this.resetForm()
+            window.location.href = '/'
           })
           .catch(err => {
             this.showWarningModal(err.response.data)
@@ -119,10 +126,10 @@ export default {
       this.form.user = ''
       this.form.password = ''
     },
-    showSuccessModal(client) {
+    showSuccessModal() {
       this.$bvModal.show("modal")
       this.modal.title = "¡Operación Exitosa!"
-      this.modal.message = "Has iniciado sesión correctamente: " + client.user
+      this.modal.message = "Has iniciado sesión correctamente"
       this.modal.variant = 'success'
     },
     showWarningModal(message) {
@@ -130,6 +137,14 @@ export default {
       this.modal.message = message
       this.modal.title = "¡Operación Fallida!"
       this.modal.variant = 'warning'
+    }
+  },
+  created() {
+    if(this.$cookies.get("Session")) {
+      window.location.href = '/'
+    }
+    else {
+      this.showLogin = true
     }
   }
 }
@@ -145,12 +160,12 @@ export default {
 }
 
 .button-success-login {
-  width: 120px;
+  width: 150px;
   margin-right: 15px;
 }
 
 .button-cancel-login {
-  width: 120px;
+  width: 150px;
   margin-left: 15px;
 }
 

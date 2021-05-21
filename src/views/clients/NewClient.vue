@@ -121,10 +121,11 @@ export default {
       newForm.dni = this.form.dni
 
       axios
-          .post('https://backend-dev.roomscape.es/client/create', newForm)
+          .post('https://dev.roomscape.es/client/create', newForm)
           .then(response => {
             this.showSuccessModal(response.data)
             this.resetForm()
+            window.location.href = '/login'
           })
           .catch(err => {
             this.showWarningModal(err.response.data)
