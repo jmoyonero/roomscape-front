@@ -1,6 +1,6 @@
 <template>
-  <div id="new_client_form">
-    <h1 id="title">Formulario de Registro</h1>
+  <div id="login_form" v-if="showLogin">
+    <div id="title"><h1>Login</h1></div>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group
           id="input-group-user"
@@ -36,27 +36,14 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group
-          id="input-group-dni"
-          label="DNI:"
-          label-for="input-dni"
-      >
-        <b-form-input
-            id="input-dni"
-            v-model="form.dni"
-            type="text"
-            placeholder=""
-            :state="dniValidator"
-            class="text-center"
-            required
-        ></b-form-input>
-      </b-form-group>
-
       <div id="buttons" class="d-flex justify-content-between">
-        <b-button :disabled="!enabledButton" class="button-success" type="submit" variant="primary">Registrarte
-        </b-button>
-        <b-button class="button-cancel" type="reset" variant="danger">Cancelar</b-button>
+        <b-button :disabled="!enabledButton" class="button-success-login" type="submit" variant="primary">Iniciar Sesión</b-button>
+        <b-button class="button-cancel-login" type="reset" variant="danger">Cancelar</b-button>
       </div>
+
+      <br>
+
+      <p>¿No estás registrado? <a href="/registro">Registrate</a></p>
     </b-form>
 
     <b-modal id="modal-1" title="BootstrapVue">
@@ -77,26 +64,26 @@ import axios from "axios";
 import ModalMessage from "@/components/Modal";
 
 export default {
-  name: "NewClient",
+  name: "Login",
   components: {ModalMessage},
   data() {
     return {
       form: {
         user: '',
         password: '',
-        dni: ''
       },
       show: true,
       modal: {
         title: '',
         message: '',
         variant: '',
-      }
+      },
+      showLogin: false
     }
   },
   computed: {
     enabledButton() {
-      return this.userValidator && this.passwordValidator && this.dniValidator;
+      return this.userValidator && this.passwordValidator;
     },
     userValidator() {
       if (this.form.user == '') return null
@@ -105,10 +92,6 @@ export default {
     passwordValidator() {
       if (this.form.password == '') return null
       return /^(?=\w*\d)(?=\w*[a-z])\S{8,}$/.test(this.form.password) && this.form.password.length >= 8;
-    },
-    dniValidator() {
-      if (this.form.dni == '') return null
-      return this.validateDni(this.form.dni)
     }
   },
   methods: {
@@ -118,14 +101,18 @@ export default {
       let newForm = {}
       newForm.user = this.form.user
       newForm.password = window.btoa(unescape(encodeURIComponent(this.form.password + "roomscape")));
-      newForm.dni = this.form.dni
 
       axios
-          .post('https://backend-dev.roomscape.es/client/create', newForm)
+          .post('https://backend-dev.roomscape.es/login', newForm)
           .then(response => {
+            let d = new Date();
+            d.setTime(d.getTime() + 1 * 60 * 60 * 1000);
+            let expires = "expires=" + d.toUTCString();
+            document.cookie =
+                "Session=" + response.data + ";" + expires + ";path=/";
             this.showSuccessModal(response.data)
             this.resetForm()
-            window.location.href = '/login'
+            window.location.href = '/'
           })
           .catch(err => {
             this.showWarningModal(err.response.data)
@@ -138,12 +125,11 @@ export default {
     resetForm() {
       this.form.user = ''
       this.form.password = ''
-      this.form.dni = ''
     },
-    showSuccessModal(client) {
+    showSuccessModal() {
       this.$bvModal.show("modal")
       this.modal.title = "¡Operación Exitosa!"
-      this.modal.message = "Te has registrado correctamente: " + client.user
+      this.modal.message = "Has iniciado sesión correctamente"
       this.modal.variant = 'success'
     },
     showWarningModal(message) {
@@ -151,26 +137,21 @@ export default {
       this.modal.message = message
       this.modal.title = "¡Operación Fallida!"
       this.modal.variant = 'warning'
-    },
-    validateDni(dni) {
-      let regExpDni = /^\d{8}[A-Z]$/;
-
-      if (regExpDni.test(dni) == true) {
-        let number = dni.substr(0, dni.length - 1);
-        let letterId = dni.substr(dni.length - 1, 1);
-        let letter = 'TRWAGMYFPDXBNJZSQVHLCKET';
-        number = number % 23;
-        return letter.substring(number, number + 1) == letterId.toUpperCase()
-      } else {
-        return false
-      }
+    }
+  },
+  created() {
+    if(this.$cookies.get("Session")) {
+      window.location.href = '/'
+    }
+    else {
+      this.showLogin = true
     }
   }
 }
 </script>
 
 <style scoped>
-#new_client_form {
+#login_form {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -178,14 +159,18 @@ export default {
   align-items: center;
 }
 
-.button-success {
-  width: 120px;
+.button-success-login {
+  width: 150px;
   margin-right: 15px;
 }
 
-.button-cancel {
-  width: 120px;
+.button-cancel-login {
+  width: 150px;
   margin-left: 15px;
+}
+
+#title {
+  width: 500px;
 }
 
 @media (max-width: 768px) {
