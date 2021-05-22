@@ -4,6 +4,7 @@ import router from './router'
 
 import store from './store'
 import VueCryptojs from 'vue-cryptojs'
+import VueCookies from 'vue-cookies'
 
 import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 
@@ -15,6 +16,7 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueCryptojs)
+Vue.use(VueCookies)
 
 new Vue({
     router,

@@ -15,6 +15,11 @@ const routes = [
         component: () => import('../views/escape-rooms/ListEscapeRooms.vue')
     },
     {
+        path: '/reservas/alta/:id',
+        name: 'NewReservation',
+        component: () => import('../views/reservations/NewReservation.vue')
+    },
+    {
         path: '/registro',
         name: 'NewClient',
         component: () => import('../views/clients/NewClient.vue')

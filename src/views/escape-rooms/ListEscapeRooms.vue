@@ -9,7 +9,7 @@
             img-alt="Image"
             img-left
             tag="article"
-            style="max-width: 30rem;"
+            style="max-width: 30rem; min-width: 30rem;"
             class="mb-2"
         >
           <b-card-text>
@@ -22,7 +22,7 @@
             Precio: <b>{{ item.precio }} €</b>
           </b-card-text>
 
-          <b-button href="#" variant="primary">Reservar</b-button>
+          <b-button v-bind:href="reservationUrl(item.id)" variant="primary">Reservar</b-button>
         </b-card>
       </div>
       <p class="empty_msg" v-if="showEmptyMsg">En este momento no hay escape rooms disponibles.</p>
@@ -39,7 +39,13 @@ export default {
   data() {
     return {
       items: [],
-      showEmptyMsg: false
+      showEmptyMsg: false,
+      logged: false
+    }
+  },
+  methods: {
+    reservationUrl(id) {
+      return this.$cookies.get("Session") ? '/reservas/alta/' + id : '/login'
     }
   },
   created() {
@@ -48,7 +54,7 @@ export default {
         .then(response => {
           this.items = response.data.filter(escapeRoom => escapeRoom.activo)
               .sort((a, b) => a.nombre.localeCompare(b.nombre))
-          this.showEmptyMsg = this.items.length==0
+          this.showEmptyMsg = this.items.length == 0
         })
   }
 }
