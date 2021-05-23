@@ -141,23 +141,15 @@ export default {
   },
   created() {
     let escapeRoom = axios
-        .get('http://localhost:8080/escape-room/' + this.$route.params.id)
+        .get('https://backend-dev.roomscape.es/escape-room/' + this.$route.params.id)
         .then(response => {
-          /*return {
-            success: true,
-            data: response.data
-          };*/
           this.escapeRoom = response.data
           this.showSpinner = false
 
         })
     let reservations = axios
-        .get('http://localhost:8080/reservation/list?escapeRoomId=' + this.$route.params.id)
+        .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
         .then(response => {
-          /* return {
-             success: true,
-             data: response.data
-           };*/
           this.reservas = response.data
         })
     Promise.all([escapeRoom, reservations])
@@ -186,19 +178,6 @@ export default {
       event.preventDefault()
 
     },
-    getEscapeRoom() {
-
-      axios
-          .get('http://localhost:8080/escape-room/' + this.$route.params.id)
-          .then(response => {
-            this.escapeRoom = response.data
-          })
-      axios
-          .get('http://localhost:8080/reservation/list?escapeRoomId=' + this.$route.params.id)
-          .then(response => {
-            this.reservas = response.data
-          })
-    },
     createReservation() {
       let reservation = this.form
       reservation.duracion = this.escapeRoom.duracion
@@ -207,7 +186,7 @@ export default {
       reservation.cliente = atob(this.$cookies.get("Session")).split("-")[0]
 
       axios
-          .post('http://localhost:8080/reservation/create', reservation)
+          .post('https://backend-dev.roomscape.es/reservation/create', reservation)
           .then(response => {
             this.showSuccessModal(response.data)
             this.resetForm()
@@ -233,9 +212,6 @@ export default {
       this.form.fechaIni = ''
       this.form.participantes = ''
       this.date = null
-    },
-    showSelectedValues() {
-      alert(this.time + '  ' + this.date)
     },
     onContext() {
       this.generateTimes()
