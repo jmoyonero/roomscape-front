@@ -147,7 +147,12 @@ export default {
           this.showSpinner = false
 
         })
-    Promise.all([escapeRoom, this.refreshReservation()])
+    let reservations = axios
+        .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
+        .then(response => {
+          this.reservas = response.data
+        })
+    Promise.all([escapeRoom, reservations])
         .then(() => {
           this.showView = true
           this.showSpinner = false
@@ -185,18 +190,20 @@ export default {
           .then(response => {
             this.showSuccessModal(response.data)
             this.resetForm()
-            this.refreshReservation()
+            axios
+                .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
+                .then(response => {
+                  this.reservas = response.data
+                })
           })
           .catch(err => {
             this.showWarningModal(err.response.data)
-            this.refreshReservation()
-          })
-    },
-    refreshReservation() {
-      axios
-          .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
-          .then(response => {
-            this.reservas = response.data
+            axios
+                .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
+                .then(response => {
+                  this.reservas = response.data
+                  this.generateTimes()
+                })
           })
     },
     showSuccessModal(reservation) {
