@@ -4,7 +4,9 @@
     <NavigationMenu/>
     <div id="main_container">
       <div class="view_container">
-        <router-view class="views"/>
+        <div id="view">
+          <router-view class="views"/>
+        </div>
         <Footer/>
       </div>
     </div>
@@ -22,6 +24,11 @@ export default {
     NavigationMenu,
     Header,
     Footer
+  },
+  data() {
+    return {
+      showSpinnerRoot: true
+    }
   }
 }
 </script>
@@ -48,6 +55,10 @@ body {
 }
 
 .views {
+  min-height: calc(100vh - 206px);
+}
+
+#view {
   min-height: calc(100vh - 206px);
 }
 </style>
