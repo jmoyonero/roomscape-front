@@ -14,9 +14,11 @@
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
+    "moment": "^2.29.1",
     "vue": "^2.6.12",
     "vue-cookies": "^1.7.4",
     "vue-cryptojs": "^2.1.5",
+    "vue-moment": "^4.1.0",
     "vue-router": "^3.5.1"
   },
   "devDependencies": {
