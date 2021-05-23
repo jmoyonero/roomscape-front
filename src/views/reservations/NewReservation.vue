@@ -185,17 +185,19 @@ export default {
       reservation.nombreEscapeRoom = this.escapeRoom.nombre
       reservation.cliente = atob(this.$cookies.get("Session")).split("-")[0]
 
-      let createReservation =  axios
+      axios
           .post('https://backend-dev.roomscape.es/reservation/create', reservation)
           .then(response => {
             this.showSuccessModal(response.data)
             this.resetForm()
+            axios
+                .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
+                .then(response => {
+                  this.reservas = response.data
+                })
           })
           .catch(err => {
             this.showWarningModal(err.response.data)
-          })
-      Promise.all([createReservation])
-          .then(() => {
             axios
                 .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
                 .then(response => {
