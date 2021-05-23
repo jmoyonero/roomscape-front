@@ -54,22 +54,28 @@ export default {
   },
   methods: {
     reservationUrl(id) {
-      return this.$cookies.get("Session") ? '/reservas/alta/' + id : '/login'
+      return this.$cookies && this.$cookies.get("Session") ? '/reservas/alta/' + id : '/login'
     }
   },
   created() {
 
-    let test = axios
+    let calls = axios
         .get('https://backend-dev.roomscape.es/escape-room/list')
         .then(response => {
           this.items = response.data.filter(escapeRoom => escapeRoom.activo)
               .sort((a, b) => a.nombre.localeCompare(b.nombre))
           this.showEmptyMsg = this.items.length == 0
         })
-    Promise.all([test])
+        .catch(() => {
+          this.showEmptyMsg = true
+        })
+    Promise.all([calls])
         .then(() => {
-          this.showView = true
           this.showSpinner = false
+          this.showView = true
+        })
+        .catch(err => {
+          console.log(err)
         })
 
   }
