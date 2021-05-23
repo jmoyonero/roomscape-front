@@ -12,7 +12,7 @@
               img-alt="Image"
               img-left
               tag="article"
-              style="max-width: 30rem; min-width: 30rem;"
+              style="max-width: 30rem; min-width: 15rem;"
               class="mb-2"
           >
             <b-card-text>
@@ -102,4 +102,17 @@ img {
   height: 238px;
   width: 100px;
 }
+
+@media (max-width: 768px) {
+  img {
+    height: auto;
+    width: auto;
+  }
+
+  .card_container {
+    margin: 0px;
+    max-width: 300px;
+  }
+}
+
 </style>

@@ -298,4 +298,8 @@ select {
   min-width: 300px;
 }
 
+#buttons {
+  padding-bottom: 15px;
+}
+
 </style>
