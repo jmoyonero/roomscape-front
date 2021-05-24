@@ -176,7 +176,7 @@ export default {
     },
     onReset(event) {
       event.preventDefault()
-
+      this.resetForm()
     },
     createReservation() {
       let reservation = this.form
@@ -190,6 +190,7 @@ export default {
           .then(response => {
             this.showSuccessModal(response.data)
             this.resetForm()
+            console.log("after post")
             axios
                 .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
                 .then(response => {
@@ -198,10 +199,12 @@ export default {
           })
           .catch(err => {
             this.showWarningModal(err.response.data)
+            console.log("after catch")
             axios
                 .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
                 .then(response => {
                   this.reservas = response.data
+                  console.log("dentro de la llamada ", JSON.stringify(response.data))
                   this.generateTimes()
                 })
           })
@@ -245,7 +248,7 @@ export default {
       let closingHours = new Date(this.date)
       closingHours.setHours(22, 0, 0)
 
-      this.reservas.filter(reservation => reservation.activo)
+      this.reservas = this.reservas.filter(reservation => reservation.activo)
 
       while (openingHours.getTime() + this.escapeRoom.duracion * 60000 <= closingHours.getTime()) {
         let endDate = new Date(openingHours.getTime() + this.escapeRoom.duracion * 60000)
@@ -253,7 +256,7 @@ export default {
         let reservations = this.reservas.filter(r => this.convertCustomStringToDate(r.fechaIni).getTime() >= openingHours.getTime() && this.convertCustomStringToDate(r.fechaIni).getTime() < endDate.getTime())
         times.push(
             {
-              value: moment(openingHours).format('DD/MM/YYYY hh:mm'),
+              value: moment(openingHours).format('DD/MM/YYYY HH:mm'),
               text: openingHours.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'}),
               disabled: reservations.length > 0
             }
