@@ -83,11 +83,11 @@
         </b-form-group>
 
         <div id="buttons" class="d-flex justify-content-between">
-          <b-button class="button" type="submit" variant="primary"
+          <b-button id="success_button" class="button" type="submit" variant="primary"
                     :disabled="this.form.fechaIni==null || !capacityValidator">
             Reservar
           </b-button>
-          <b-button class="button" type="reset" variant="danger">Cancelar</b-button>
+          <b-button id="cancel_button" class="button" type="reset" variant="danger">Cancelar</b-button>
         </div>
       </b-form>
       <ModalMessage

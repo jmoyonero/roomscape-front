@@ -8,10 +8,6 @@ const localVue = createLocalVue();
 localVue.use(BootstrapVue);
 
 import axios from 'axios';
-import Cookie from "cookies-js";
-
-Cookie.get("Session");
-
 
 jest.mock('axios');
 
