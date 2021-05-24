@@ -190,7 +190,6 @@ export default {
           .then(response => {
             this.showSuccessModal(response.data)
             this.resetForm()
-            console.log("after post")
             axios
                 .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
                 .then(response => {
@@ -199,12 +198,10 @@ export default {
           })
           .catch(err => {
             this.showWarningModal(err.response.data)
-            console.log("after catch")
             axios
                 .get('https://backend-dev.roomscape.es/reservation/list?escapeRoomId=' + this.$route.params.id)
                 .then(response => {
                   this.reservas = response.data
-                  console.log("dentro de la llamada ", JSON.stringify(response.data))
                   this.generateTimes()
                 })
           })
