@@ -67,11 +67,17 @@ describe('Pruebas unitarias Alta Reserva', () => {
         path: '/reservas/alta/1',
         params: {id: 1}
     }
+    const $cookies = {
+        get: function () {
+            return "session_id"
+        },
+    }
 
     let wrapper = shallowMount(NewReservation, {
         localVue,
         mocks: {
-            $route
+            $route,
+            $cookies
         }
     })
 

@@ -156,7 +156,7 @@ export default {
         .then(() => {
           this.showView = true
           this.showSpinner = false
-          if (!this.$cookies.get("Session")) window.location.href = '/login'
+          if (!this.$cookies || !this.$cookies.get("Session")) window.location.href = '/login'
           else this.showView = true
         })
   },
