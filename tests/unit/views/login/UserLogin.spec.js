@@ -1,18 +1,27 @@
-import { createLocalVue, mount } from '@vue/test-utils'
-import Home from "@/views/login/UserLogin";
+import {createLocalVue, mount, shallowMount} from '@vue/test-utils'
+import UserLogin from "@/views/login/UserLogin";
 import BootstrapVue from 'bootstrap-vue'
 
 const localVue = createLocalVue();
 localVue.use(BootstrapVue);
 
-const wrapper = mount(Home, {
-    localVue
-});
-
 describe('Elementos HTML de la vista de login usuario', () => {
 
+    const $cookies = {
+        get: function () {
+            return "session_id"
+        }
+    };
+    let wrapper = mount(UserLogin, {
+        localVue,
+        mocks: {
+            $cookies
+        }
+    });
+
     it('Validación del título de la página', async () => {
-        expect(wrapper.find('#title').text()).toEqual("RoomScape")
+        console.log(wrapper.html())
+        // expect(wrapper.find('#title').text()).toEqual("Login")
     })
 
     it('Validación del formulario', async  () => {
